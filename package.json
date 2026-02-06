@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
-    "migrate": "prisma migrate dev",
-    "migrate:deploy": "prisma migrate deploy",
-    "prisma:generate": "prisma generate"
+    "migrate": "DATABASE_URL=${DATABASE_URL:-file:./dev.db} prisma migrate dev",
+    "migrate:deploy": "DATABASE_URL=${DATABASE_URL:-file:./dev.db} prisma migrate deploy",
+    "prisma:generate": "DATABASE_URL=${DATABASE_URL:-file:./dev.db} prisma generate"
   },
   "dependencies": {
     "@prisma/client": "6.4.1",
