@@ -1,48 +1,58 @@
-<<<<<<< HEAD
-# Next.js App Router + TypeScript + Tailwind + MDX Scaffold
+# OSS Support Portal
 
-This repository is a ready-to-push scaffold for:
-- Next.js (App Router)
-- TypeScript
-- Tailwind CSS
-- MDX-powered **Insights** section (content stored in `content/insights/*.mdx`)
+A single-server OSS Support Portal that ships a status board, announcements feed, and admin control panel with a clean, modern UI.
 
-## Quick start
+## Features
+- Login-protected admin panel for managing services and announcements.
+- User dashboard with grouped service status, overall indicator, and announcements feed.
+- REST API endpoints for service status and notifications.
+- OpenAPI v1 spec viewer in the admin panel.
+- SQLite + Prisma for a lightweight, file-based database.
+
+## Local development
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Run Prisma migrations (creates `dev.db` locally):
+   ```bash
+   npx prisma migrate dev
+   ```
+3. Start the app:
+   ```bash
+   npm run dev
+   ```
+4. Visit `http://localhost:3000`.
+
+## Default admin credentials
+- **Username:** `admin`
+- **Password:** `Brillar`
+
+On first run, the admin user is seeded automatically if it does not already exist.
+
+## Change the admin password
+Use Prisma Studio or update the user record directly:
 
 ```bash
-npm install
-npm run dev
+npx prisma studio
 ```
 
-Open:
-- Home: http://localhost:3000
-- Insights: http://localhost:3000/insights
+Open the `User` table and update the password hash. For a quick reset, you can also delete the admin user and restart the server to re-seed.
 
-## Add a new MDX post
+## OpenAPI spec
+Open the admin panel and select the **OpenAPI Spec** tab. The spec matches the live endpoints:
+- `GET /api/service-status`
+- `GET /api/notifications`
 
-Create a file in:
+## Render one-click deploy
+This repo includes a `render.yaml` blueprint. To deploy:
 
-`content/insights/<your-slug>.mdx`
+1. Create a new Render Blueprint deployment and point it at this repo.
+2. Render provisions a disk at `/data` for the SQLite database.
+3. The service uses `npm start` and runs migrations automatically during build.
 
-Example frontmatter:
+> **Note:** Render’s filesystem is ephemeral without a disk. The blueprint attaches a disk so your SQLite database persists.
 
-```mdx
----
-title: "My Post"
-date: "2026-01-24"
-summary: "Short summary"
-tags: ["tag1", "tag2"]
-published: true
----
-```
-
-Then it will appear on `/insights`.
-
-## Notes
-
-- MDX rendering is handled via `next-mdx-remote/rsc` (server components-friendly).
-- Post listing and detail pages read files from disk on the server.
-=======
-# OSS
-OSS for API and System Availability with Human Triggered Announcements 
->>>>>>> 507ef8486f7be6149d8b07e521253bc138368336
+## Mock mode note
+Service status is currently updated manually through the admin panel. In future iterations, these entries can be wired to real health checks or automated incident tooling.

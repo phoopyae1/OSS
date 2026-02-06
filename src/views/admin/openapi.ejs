@@ -1,0 +1,38 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+<main class="mx-auto max-w-6xl px-6 py-12">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-sm uppercase tracking-[0.3em] text-indigo-500">Admin panel</p>
+      <h1 class="mt-2 text-3xl font-semibold">OpenAPI v1 spec</h1>
+      <p class="mt-2 text-slate-600">Copy this spec into your API documentation tool.</p>
+    </div>
+    <div class="flex gap-2">
+      <a class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium" href="/admin/services">Services</a>
+      <a class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium" href="/admin/announcements">Announcements</a>
+    </div>
+  </div>
+
+  <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold">Spec</h2>
+      <button
+        class="rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-700"
+        type="button"
+        onclick="navigator.clipboard.writeText(document.getElementById('openapi-spec').value)"
+      >
+        Copy
+      </button>
+    </div>
+    <textarea
+      id="openapi-spec"
+      class="mt-4 h-[420px] w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 font-mono text-xs"
+      readonly
+    ><%= spec %></textarea>
+    <p class="mt-4 text-sm text-slate-500">
+      Future versions can connect service status to real health checks, incident response workflows, or CI-driven
+      automation without changing the public API contract.
+    </p>
+  </div>
+</main>
+<%- include('../partials/footer') %>

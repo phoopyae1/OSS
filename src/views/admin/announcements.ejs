@@ -1,0 +1,107 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+<main class="mx-auto max-w-6xl px-6 py-12">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-sm uppercase tracking-[0.3em] text-indigo-500">Admin panel</p>
+      <h1 class="mt-2 text-3xl font-semibold">Announcements</h1>
+    </div>
+    <div class="flex gap-2">
+      <a class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium" href="/admin/services">Services</a>
+      <a class="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium" href="/admin/openapi">OpenAPI Spec</a>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <%- include('../partials/flash') %>
+  </div>
+
+  <% const toInput = (value) => value ? new Date(value).toISOString().slice(0,16) : '' %>
+
+  <div class="mt-8 grid gap-6 lg:grid-cols-[1fr_2fr]">
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="text-lg font-semibold">Add announcement</h2>
+      <form class="mt-4 flex flex-col gap-3" action="/admin/announcements" method="POST">
+        <input class="rounded-xl border border-slate-200 px-4 py-2" name="title" placeholder="Announcement title" required />
+        <textarea class="min-h-[120px] rounded-xl border border-slate-200 px-4 py-2" name="body" placeholder="Markdown supported" required></textarea>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="text-xs font-semibold uppercase text-slate-500" for="startsAt">Starts at</label>
+            <input class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2" type="datetime-local" name="startsAt" id="startsAt" />
+          </div>
+          <div>
+            <label class="text-xs font-semibold uppercase text-slate-500" for="endsAt">Ends at</label>
+            <input class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2" type="datetime-local" name="endsAt" id="endsAt" />
+          </div>
+        </div>
+        <label class="flex items-center gap-2 text-sm text-slate-600">
+          <input type="checkbox" name="isActive" checked />
+          Active
+        </label>
+        <button class="rounded-xl bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" type="submit">
+          Publish announcement
+        </button>
+      </form>
+    </section>
+
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="text-lg font-semibold">Existing announcements</h2>
+      <div class="mt-4 flex flex-col gap-4">
+        <% if (!announcements.length) { %>
+          <p class="text-slate-500">No announcements yet.</p>
+        <% } %>
+        <% announcements.forEach((announcement) => { %>
+          <form class="rounded-2xl border border-slate-200 bg-slate-50 p-4" action="/admin/announcements/<%= announcement.id %>" method="POST">
+            <div class="grid gap-3">
+              <input class="rounded-xl border border-slate-200 px-4 py-2" name="title" value="<%= announcement.title %>" required />
+              <textarea class="min-h-[100px] rounded-xl border border-slate-200 px-4 py-2" name="body" required><%= announcement.body %></textarea>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label class="text-xs font-semibold uppercase text-slate-500" for="startsAt-<%= announcement.id %>">Starts at</label>
+                  <input
+                    class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2"
+                    type="datetime-local"
+                    name="startsAt"
+                    id="startsAt-<%= announcement.id %>"
+                    value="<%= toInput(announcement.startsAt) %>"
+                  />
+                </div>
+                <div>
+                  <label class="text-xs font-semibold uppercase text-slate-500" for="endsAt-<%= announcement.id %>">Ends at</label>
+                  <input
+                    class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2"
+                    type="datetime-local"
+                    name="endsAt"
+                    id="endsAt-<%= announcement.id %>"
+                    value="<%= toInput(announcement.endsAt) %>"
+                  />
+                </div>
+              </div>
+              <label class="flex items-center gap-2 text-sm text-slate-600">
+                <input type="checkbox" name="isActive" <%= announcement.isActive ? 'checked' : '' %> />
+                Active
+              </label>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <button class="rounded-full bg-slate-900 px-4 py-2 text-sm font-medium text-white" type="submit">
+                Save changes
+              </button>
+              <button
+                class="rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700"
+                type="submit"
+                formmethod="POST"
+                formaction="/admin/announcements/<%= announcement.id %>/delete"
+              >
+                Delete
+              </button>
+              <span class="ml-auto text-xs text-slate-400">
+                Updated <%= announcement.updatedAt.toLocaleString() %>
+              </span>
+            </div>
+          </form>
+        <% }) %>
+      </div>
+    </section>
+  </div>
+</main>
+<%- include('../partials/footer') %>

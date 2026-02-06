@@ -1,0 +1,10 @@
+<% if (flash.error.length) { %>
+  <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700">
+    <%= flash.error[0] %>
+  </div>
+<% } %>
+<% if (flash.success.length) { %>
+  <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700">
+    <%= flash.success[0] %>
+  </div>
+<% } %>
