@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Next.js App Router + TypeScript + Tailwind + MDX Scaffold
 
 This repository is a ready-to-push scaffold for:
@@ -41,3 +42,7 @@ Then it will appear on `/insights`.
 
 - MDX rendering is handled via `next-mdx-remote/rsc` (server components-friendly).
 - Post listing and detail pages read files from disk on the server.
+=======
+# OSS
+OSS for API and System Availability with Human Triggered Announcements 
+>>>>>>> 507ef8486f7be6149d8b07e521253bc138368336
