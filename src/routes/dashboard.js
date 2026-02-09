@@ -53,10 +53,26 @@ export default function dashboardRoutes({ prisma }) {
         orderBy: { createdAt: "desc" }
       });
 
+      const statusCounts = services.reduce((acc, service) => {
+        acc.total += 1;
+        acc[service.status] = (acc[service.status] || 0) + 1;
+        return acc;
+      }, {
+        total: 0
+      });
+
+      const downServices = services.filter((service) =>
+        ["PARTIAL_OUTAGE", "MAJOR_OUTAGE"].includes(service.status)
+      );
+      const attentionServices = services.filter((service) => service.status !== "OPERATIONAL");
+
       res.render("dashboard/index", {
         title: "Dashboard",
         overallStatus: overallStatus(services),
         groupedServices: groupServices(services),
+        statusCounts,
+        downServices,
+        attentionServices,
         activeAnnouncements: activeAnnouncements.map((announcement) => ({
           ...announcement,
           html: renderMarkdown(announcement.body)

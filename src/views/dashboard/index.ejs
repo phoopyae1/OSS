@@ -13,6 +13,25 @@
       </span>
     </div>
 
+    <section class="grid gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-4">
+      <div>
+        <p class="text-xs uppercase tracking-wider text-slate-400">Total services</p>
+        <p class="mt-2 text-2xl font-semibold text-slate-900"><%= statusCounts.total %></p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wider text-slate-400">Operational</p>
+        <p class="mt-2 text-2xl font-semibold text-emerald-600"><%= statusCounts.OPERATIONAL || 0 %></p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wider text-slate-400">Needs attention</p>
+        <p class="mt-2 text-2xl font-semibold text-amber-600"><%= attentionServices.length %></p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wider text-slate-400">Outages</p>
+        <p class="mt-2 text-2xl font-semibold text-rose-600"><%= downServices.length %></p>
+      </div>
+    </section>
+
     <div class="grid gap-6 lg:grid-cols-[2fr_1fr]">
       <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div class="flex items-center justify-between">
@@ -48,6 +67,47 @@
       </section>
 
       <section class="flex flex-col gap-6">
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 class="text-xl font-semibold">Monitoring highlights</h2>
+          <div class="mt-4 space-y-3 text-sm text-slate-600">
+            <% if (!attentionServices.length) { %>
+              <p>All services are reporting as operational. No customer impact detected.</p>
+            <% } %>
+            <% if (downServices.length) { %>
+              <div>
+                <p class="font-semibold text-rose-600">Service outages</p>
+                <ul class="mt-2 list-disc space-y-1 pl-5">
+                  <% downServices.forEach((service) => { %>
+                    <li><%= service.name %> — <%= statusLabels[service.status] %></li>
+                  <% }) %>
+                </ul>
+              </div>
+            <% } %>
+            <% if (!downServices.length && attentionServices.length) { %>
+              <div>
+                <p class="font-semibold text-amber-600">Degraded or maintenance services</p>
+                <ul class="mt-2 list-disc space-y-1 pl-5">
+                  <% attentionServices.forEach((service) => { %>
+                    <% if (service.status !== "OPERATIONAL") { %>
+                      <li><%= service.name %> — <%= statusLabels[service.status] %></li>
+                    <% } %>
+                  <% }) %>
+                </ul>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 class="text-xl font-semibold">What to do if a server is down</h2>
+          <ol class="mt-4 list-decimal space-y-2 pl-5 text-sm text-slate-600">
+            <li>Confirm the impacted API in the status board and share the outage label with customers.</li>
+            <li>Check the latest announcement updates and post a new notice if none exists.</li>
+            <li>Escalate to the on-call owner with the service name, status, and timestamp.</li>
+            <li>Provide workaround guidance and an estimated next update time.</li>
+          </ol>
+        </div>
+
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 class="text-xl font-semibold">Active announcements</h2>
           <div class="mt-4 flex flex-col gap-4">
